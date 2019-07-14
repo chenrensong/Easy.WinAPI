@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Easy.WinAPI
 {
-    internal sealed partial class WinAPIWrapper
+    internal sealed class WinAPIWrapper
     {
         /// <summary>
         /// 热键
@@ -180,7 +180,7 @@ namespace Easy.WinAPI
           );
 
         [DllImport("user32.dll", EntryPoint = "SendMessage")]
-        private static extern int SendMessage(int hWnd, int Msg, int wParam, ref Structs.CopyData lParam);
+        private static extern int SendMessage(int hWnd, int Msg, int wParam, ref CopyDataStruct lParam);
 
         [DllImport("user32.dll", EntryPoint = "SendMessage")]
         public static extern int SendMessage(IntPtr hWnd, int Msg, IntPtr wParam, string lParam);
@@ -221,6 +221,7 @@ namespace Easy.WinAPI
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, EntryPoint = "PostMessage")]
         public static extern IntPtr PostMessage(IntPtr hwndParent, int hwndChildAfter, IntPtr wParam, string lpszWindow);
+
 
     }
 }
