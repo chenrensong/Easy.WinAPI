@@ -255,7 +255,8 @@ namespace Easy.WinAPI
         public static bool RegisterHotKey(IntPtr handle, int id, EasyModifierKeys modifiers, EasyKey key)
         {
             var virtualCode = EasyKeyInterop.VirtualKeyFromKey(key);
-            return RegisterHotKey(handle, id, (uint)virtualCode, (uint)modifiers);
+            var modifiersKey = (uint)modifiers;
+            return RegisterHotKey(handle, id, modifiersKey, (uint)virtualCode);
         }
 
         /// <summary>
