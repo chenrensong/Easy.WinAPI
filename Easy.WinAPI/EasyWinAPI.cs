@@ -76,7 +76,27 @@ namespace Easy.WinAPI
         /// <param name="lParam">要发送的内容</param>
         public static void SetText(IntPtr hWnd, string lParam)
         {
-            WinAPIWrapper.SendMessage(hWnd, WinAPIWrapper.WM_SETTEXT, IntPtr.Zero, lParam);
+            WinAPIWrapper.SendMessage(hWnd, NativeMethods.WM_SETTEXT, IntPtr.Zero, lParam);
+        }
+
+        /// <summary>
+        /// 设置键盘Hook
+        /// </summary>
+        /// <param name="lpfn"></param>
+        /// <returns></returns>
+        public static IntPtr SetKeyboardHookEx(LowLevelKeyboardProc lpfn)
+        {
+            return WinAPIWrapper.SetWindowsHookEx(NativeMethods.WH_KEYBOARD_LL, lpfn, IntPtr.Zero, 0);
+        }
+
+        public static IntPtr SetWindowsHookEx(int idHook, LowLevelKeyboardProc lpfn, IntPtr hMod, uint dwThreadId)
+        {
+            return WinAPIWrapper.SetWindowsHookEx(idHook, lpfn, hMod, dwThreadId);
+        }
+
+        public static void UnhookWindowsHookEx(IntPtr hhk)
+        {
+            WinAPIWrapper.UnhookWindowsHookEx(hhk);
         }
 
         /// <summary>
@@ -145,7 +165,7 @@ namespace Easy.WinAPI
 
         public static void GetInfo(IntPtr vHandle)
         {
-            WinAPIWrapper.SendMessage(vHandle, WinAPIWrapper.WM_COMMAND, WinAPIWrapper.IDM_VIEWSOURCE, (int)vHandle);
+            WinAPIWrapper.SendMessage(vHandle, NativeMethods.WM_COMMAND, NativeMethods.IDM_VIEWSOURCE, (int)vHandle);
         }
 
         /// <summary>
@@ -164,8 +184,8 @@ namespace Easy.WinAPI
         {
             var lParam = ((y << 16) | x); // The coordinates 
             var wParam = 0; // Additional parameters for the click (e.g. Ctrl) 
-            WinAPIWrapper.SendMessage(vHandle, WinAPIWrapper.WM_LBUTTONDOWN, wParam, lParam); // Mouse button down 
-            WinAPIWrapper.SendMessage(vHandle, WinAPIWrapper.WM_LBUTTONUP, wParam, lParam); // Mouse button up 
+            WinAPIWrapper.SendMessage(vHandle, NativeMethods.WM_LBUTTONDOWN, wParam, lParam); // Mouse button down 
+            WinAPIWrapper.SendMessage(vHandle, NativeMethods.WM_LBUTTONUP, wParam, lParam); // Mouse button up 
             //SendMessage(handle, upCode, wParam, lParam); // Mouse button up 
         }
 
@@ -312,7 +332,12 @@ namespace Easy.WinAPI
         /// </summary>
         public static void SetUserAgent(string userAgent)
         {
-            WinAPIWrapper.UrlMkSetSessionOption(WinAPIWrapper.URLMON_OPTION_USERAGENT, userAgent, userAgent.Length, 0);
+            WinAPIWrapper.UrlMkSetSessionOption(NativeMethods.URLMON_OPTION_USERAGENT, userAgent, userAgent.Length, 0);
+        }
+
+        public static IntPtr CallNextHookEx(IntPtr hhk, int nCode, IntPtr wParam, IntPtr lParam)
+        {
+            return WinAPIWrapper.CallNextHookEx(hhk, nCode, wParam, lParam);
         }
 
         //private static string GetDefaultUserAgent()
@@ -331,7 +356,8 @@ namespace Easy.WinAPI
         //}
 
         #endregion
-
-
     }
+
+    public delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
+
 }
